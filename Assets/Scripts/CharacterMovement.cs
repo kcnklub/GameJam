@@ -41,6 +41,7 @@ public class CharacterMovement : MonoBehaviour
 	//Miscellaneous
 	public bool paused = false;
 
+
 	//Animation Vars
 	Animator anim;
 	bool jumped;
@@ -176,6 +177,7 @@ public class CharacterMovement : MonoBehaviour
 		{
 			Destroy (this.gameObject);
 			isAlive = false;
+			Application.LoadLevel ("gameOver");
 		}
 	}
 

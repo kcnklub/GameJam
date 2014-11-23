@@ -13,5 +13,10 @@ public class StartButton : MonoBehaviour
 		{
 			Application.Quit();
 		}
+		if (gameObject.name == "Restart")
+		{
+			Application.LoadLevel ("firstLevel");
+		}
+
 	}
 }

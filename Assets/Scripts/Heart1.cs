@@ -40,7 +40,7 @@ public class Heart1 : MonoBehaviour {
 		}
 		if (characterMovement.Health == 0 ) 
 		{
-			heart3.gameObject.SetActive(false); 	
+			heart3.gameObject.SetActive(false);
 		}
 		
 	}
