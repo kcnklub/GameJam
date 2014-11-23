@@ -3,12 +3,10 @@ using System.Collections;
 
 public class CharacterMovement : MonoBehaviour
 {
-
-    public float speed;
-
 	//controls
+	public float speed;
     public KeyCode JumpControl;
-    public KeyCode DuckControl;
+    public KeyCode CrouchControl;
     public KeyCode PauseControl;
 	public KeyCode LeftControl;
 	public KeyCode RightControl;
@@ -18,7 +16,6 @@ public class CharacterMovement : MonoBehaviour
     public Vector2 moving;
     public float jumpStrength;
     public Vector2 jump;
-
 
 	//Info gathering vars.
     public bool isGrounded;
@@ -37,6 +34,10 @@ public class CharacterMovement : MonoBehaviour
 	public Transform gunPointFacingRight;
 	public int Health = 3;
 
+	public bool stasis;
+	public float stasisCooldown = 1.0f;
+	public float stasisCooldownTimer;
+
 	//Miscellaneous
 	public bool paused = false;
 
@@ -45,37 +46,49 @@ public class CharacterMovement : MonoBehaviour
 	bool jumped;
 	float jumpTime;
 	float jumpDelay = 0.5f;
-	 
 
-
-
-
+	//Called at the beginning
     void Start()
     {
 		isAlive = true;
 		anim = gameObject.GetComponent<Animator>();
 	}
 
+	//Called every frame.
 	void Update()
 	{
 		isGrounded = Physics2D.OverlapArea(topLeft.position, bottomRight.position,groundLayer);
 	}
+	
+	//What to do when the player collides with a certain object.
+	void OnCollisionEnter2D(Collision2D other)
+	{
+		if (other.gameObject.tag == "Enemy Laser")
+		{		
+			Destroy (other.gameObject);
+			Health -= 1;
+		}
+		if(other.gameObject.tag == "Enemy Melee")
+		{
+			Health -= 1;
+		}
+	}
 
+	//Called every tick.
     void FixedUpdate()
-    {
-        jumpMethod();
-        duck();
-        openPause();
-		movement();
-		shoot ();
-		Die ();
+	{
+		MovementMethod();
+        JumpMethod();
+        CrouchMethod();
+        PauseMethod();
+		ShootMethod();
+		DieMethod();
+		StasisMethod();
     }
 
-	/////////////////////////////////////////////////////////////////
-	///Starting the methods that are going to be called.
-	void movement()
+	//Determines how the player moves.
+	void MovementMethod()
 	{
-
 		if(Input.GetKey(LeftControl))
 		{
 			isFacingLeft = true;
@@ -96,39 +109,37 @@ public class CharacterMovement : MonoBehaviour
 			moving = new Vector2(0, rigidbody2D.velocity.y);
 			rigidbody2D.velocity = moving;
 		}
-
 	}
 
-    void jumpMethod()
+	//What to do when the player jumps.
+    void JumpMethod()
     {
-        if(Input.GetKey(JumpControl) && isGrounded )
+        if(Input.GetKey(JumpControl) && isGrounded)
         {
 			jump = new Vector2(rigidbody2D.velocity.x, jumpStrength);
 			jumpTime = jumpDelay;
 			anim.SetBool("isJumping", true);
 			rigidbody2D.velocity = jump;
-
-            Debug.Log("The Character is now jumping");
         }
-
 		jumpTime -= Time.deltaTime;
 
 		if(jumpTime <= 0 && isGrounded)
 		{
 			anim.SetBool("isJumping", false);
 		}
-
     }
 
-    void duck()
+	//What happens when the player crouches.
+    void CrouchMethod()
     {
-        if (Input.GetKey(DuckControl) && isGrounded)
+        if (Input.GetKey(CrouchControl) && isGrounded)
         {
-            Debug.Log("The Character is now Ducking");
+            Debug.Log("The Character is now Crouching");
         }
     }
 
-    void openPause()
+	//How to pause the game (currently broken).
+    void PauseMethod()
 	{
         if(Input.GetKeyUp(KeyCode.Escape))
         {
@@ -144,7 +155,9 @@ public class CharacterMovement : MonoBehaviour
 			}
 		}
     }
-	void shoot()
+
+	//How the player fires lasers.
+	void ShootMethod()
 	{
 		if(isFacingLeft && Input.GetKeyDown(ShootControl))
 		{
@@ -159,23 +172,31 @@ public class CharacterMovement : MonoBehaviour
 
 	}
 
-	void OnCollisionEnter2D(Collision2D other){
-
-		if (other.gameObject.tag == "Enemy Laser") {
-		
-			Destroy (other.gameObject);
-			Health = Health - 1;
-		}
-	 }
-
-	void Die(){
-
-		if (Health == 0) {
-
+	//What happens when the player dies.
+	void DieMethod()
+	{
+		if (Health == 0)
+		{
 			Destroy (this.gameObject);
 			isAlive = false;
 		}
+	}
 
+	//When the player takes damage, he cannot take damage for a certain time after.
+	void StasisMethod()
+	{
+		if(stasis)
+		{
+			if(stasisCooldownTimer > 0)
+			{
+				stasisCooldownTimer -= Time.deltaTime;
+			}
+			if(stasisCooldownTimer <= 0)
+			{
+				stasis = false;
+				stasisCooldownTimer = stasisCooldown;
+			}
+		}
 	}
     
 }
