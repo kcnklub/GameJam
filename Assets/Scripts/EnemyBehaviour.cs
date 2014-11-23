@@ -15,6 +15,8 @@ public class EnemyBehaviour : MonoBehaviour {
 	public float speed;
 	public float health;
 
+	GameObject canvas;
+	Score scoreText;
 
 	//info gathering Vars.
 	public bool isChasing;
@@ -38,7 +40,8 @@ public class EnemyBehaviour : MonoBehaviour {
 		isFacingLeft = true;
 		Player = GameObject.FindWithTag("Player");
 		characterMovement = Player.GetComponent<CharacterMovement>();
-
+		canvas = GameObject.Find ("Score text");
+		scoreText = canvas.GetComponent<Score>();
 	}
 	
 	// Update is called once per frame
@@ -130,5 +133,6 @@ public class EnemyBehaviour : MonoBehaviour {
 	public void Die()
 	{
 		Destroy (this.gameObject);
+		scoreText.score = scoreText.score + 10;
 	}
 }

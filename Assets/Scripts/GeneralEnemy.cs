@@ -7,6 +7,9 @@ public class GeneralEnemy : MonoBehaviour {
 	public float temp;
 	public int health;
 
+	GameObject canvas;
+	Score scoreText;
+
 	void Awake()
 	{
 
@@ -15,7 +18,8 @@ public class GeneralEnemy : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
-
+		canvas = GameObject.Find ("Score text");
+		scoreText = canvas.GetComponent<Score>();
 	}
 	
 	// Update is called once per frame
@@ -37,6 +41,7 @@ public class GeneralEnemy : MonoBehaviour {
 		if(health == 0)
 		{
 			Destroy(this.gameObject);
+			scoreText.score = scoreText.score + 10;
 		}
 	}
 
