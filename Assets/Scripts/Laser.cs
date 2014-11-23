@@ -8,7 +8,7 @@ public class Laser : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		Destroy(this.gameObject, 5);
+		Destroy(this.gameObject, 2);
 	
 	}
 	
