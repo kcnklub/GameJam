@@ -63,11 +63,18 @@ public class CharacterMovement : MonoBehaviour
 	//What to do when the player collides with a certain object.
 	void OnCollisionEnter2D(Collision2D other)
 	{
-		if (other.gameObject.tag == "Enemy Laser")
+		if (other.gameObject.tag == "EnemyLaser")
 		{		
 			Destroy (other.gameObject);
 			Health -= 1;
 		}
+
+		if (other.gameObject.tag == "EnemyLaserLeft")
+		{
+			Destroy(other.gameObject);
+			Health -= 1; 
+		}
+
 		if(other.gameObject.tag == "Enemy Melee")
 		{
 			Health -= 1;
@@ -79,7 +86,6 @@ public class CharacterMovement : MonoBehaviour
 	{
 		MovementMethod();
         JumpMethod();
-        CrouchMethod();
         PauseMethod();
 		ShootMethod();
 		DieMethod();
@@ -127,15 +133,6 @@ public class CharacterMovement : MonoBehaviour
 		{
 			anim.SetBool("isJumping", false);
 		}
-    }
-
-	//What happens when the player crouches.
-    void CrouchMethod()
-    {
-        if (Input.GetKey(CrouchControl) && isGrounded)
-        {
-            Debug.Log("The Character is now Crouching");
-        }
     }
 
 	//How to pause the game (currently broken).
