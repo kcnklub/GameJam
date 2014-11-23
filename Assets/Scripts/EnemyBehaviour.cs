@@ -10,6 +10,9 @@ public class EnemyBehaviour : MonoBehaviour {
 	// Use this for initialization
 
 	CharacterMovement characterMovement;
+	public int timer1;
+	public bool doDie;
+	public bool audioPlayed;
 
 	//Physics Vars.
 	public float speed;
@@ -42,6 +45,9 @@ public class EnemyBehaviour : MonoBehaviour {
 		characterMovement = Player.GetComponent<CharacterMovement>();
 		canvas = GameObject.Find ("Score text");
 		scoreText = canvas.GetComponent<Score>();
+		timer1 = 15;
+		doDie = false;
+		audioPlayed = false;
 	}
 	
 	// Update is called once per frame
@@ -70,7 +76,18 @@ public class EnemyBehaviour : MonoBehaviour {
 			timeToAttack -= Time.deltaTime;
 		}
 		Attack ();
-
+		if (doDie)
+		{
+			timer1--;
+		}
+		if (timer1 == 0)
+		{
+			Destroy (this.gameObject);
+			scoreText.score = scoreText.score + 10;
+			doDie = false;
+			audioPlayed = false;
+			return;
+		}
 	}
 
 
@@ -132,7 +149,11 @@ public class EnemyBehaviour : MonoBehaviour {
 	
 	public void Die()
 	{
-		Destroy (this.gameObject);
-		scoreText.score = scoreText.score + 10;
+		doDie = true;
+		if (audioPlayed == false)
+		{
+			audioPlayed = true;
+			this.audio.Play ();
+		}
 	}
 }

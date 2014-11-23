@@ -16,6 +16,9 @@ public class GeneralEnemy : MonoBehaviour {
 
 	GameObject canvas;
 	Score scoreText;
+	public int timer1;
+	public bool doDie;
+	public bool audioPlayed;
 
 	void Awake()
 	{
@@ -28,6 +31,9 @@ public class GeneralEnemy : MonoBehaviour {
 		initialPos = new Vector2(this.transform.position.x, this.transform.position.y);
 		canvas = GameObject.Find ("Score text");
 		scoreText = canvas.GetComponent<Score>();
+		timer1 = 15;
+		doDie = false;
+		audioPlayed = false;
 	}
 	
 	//Called every frame.
@@ -40,6 +46,18 @@ public class GeneralEnemy : MonoBehaviour {
 	void FixedUpdate()
 	{
 		Slide();
+		if (doDie)
+		{
+			timer1--;
+		}
+		if (timer1 == 0)
+		{
+			Destroy (this.gameObject);
+			scoreText.score = scoreText.score + 10;
+			doDie = false;
+			audioPlayed = false;
+			return;
+		}
 	}
 
 	//What happens when the enemy is shot.
@@ -57,8 +75,12 @@ public class GeneralEnemy : MonoBehaviour {
 	{
 		if(Health == 0)
 		{
-			Destroy(this.gameObject);
-			scoreText.score = scoreText.score + 10;
+			doDie = true;
+			if (audioPlayed == false)
+			{
+				audioPlayed = true;
+				this.audio.Play ();
+			}
 		}
 	}
 
