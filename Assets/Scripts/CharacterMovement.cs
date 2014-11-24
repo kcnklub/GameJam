@@ -19,8 +19,6 @@ public class CharacterMovement : MonoBehaviour
 
 	//Info gathering vars.
     public bool isGrounded;
-	public bool isFacingLeft;
-	public bool isFacingRight;
 	public bool isAlive;
 
 	//all of the jumping to check if the player is grounded.
@@ -87,7 +85,6 @@ public class CharacterMovement : MonoBehaviour
 	{
 		MovementMethod();
         JumpMethod();
-        PauseMethod();
 		ShootMethod();
 		DieMethod();
 		StasisMethod();
@@ -98,16 +95,14 @@ public class CharacterMovement : MonoBehaviour
 	{
 		if(Input.GetKey(LeftControl))
 		{
-			isFacingLeft = true;
-			isFacingRight = false;
+
 			moving = new Vector2(-speed, rigidbody2D.velocity.y);
 			rigidbody2D.velocity = moving;
 
 		}
 		else if(Input.GetKey(RightControl))
 		{
-			isFacingLeft = false;
-			isFacingRight = true;
+
 			moving = new Vector2(speed, rigidbody2D.velocity.y);
 			rigidbody2D.velocity = moving;
 		}
@@ -135,34 +130,12 @@ public class CharacterMovement : MonoBehaviour
 			anim.SetBool("isJumping", false);
 		}
     }
-
-	//How to pause the game (currently broken).
-    void PauseMethod()
-	{
-        if(Input.GetKeyUp(KeyCode.Escape))
-        {
-			if(!paused)
-			{
-				Time.timeScale = 0;
-				paused = true;
-			}
-			if(paused)
-			{
-				Time.timeScale = 1;
-				paused = false;
-			}
-		}
-    }
-
+	
 	//How the player fires lasers.
 	void ShootMethod()
 	{
-		if(isFacingLeft && Input.GetKeyDown(ShootControl))
-		{
-			Instantiate(Laser_pref_left, new Vector2(gunPointFacingRight.transform.position.x, gunPointFacingRight.transform.position.y), Quaternion.identity);
 
-		}
-		if(isFacingRight && Input.GetKeyDown(ShootControl))
+		if(Input.GetKeyDown(ShootControl))
 		{
 			Instantiate(Laser_pref, new Vector2(gunPointFacingRight.transform.position.x, gunPointFacingRight.transform.position.y), Quaternion.identity);
 

@@ -18,6 +18,11 @@ public class EnemyBehaviour : MonoBehaviour {
 	public float speed;
 	public float health;
 
+	//SpriteRenderer shit
+	public SpriteRenderer mySpriteRenderer;
+	public Sprite left;
+	public Sprite right;
+
 	GameObject canvas;
 	Score scoreText;
 
@@ -48,6 +53,7 @@ public class EnemyBehaviour : MonoBehaviour {
 		timer1 = 15;
 		doDie = false;
 		audioPlayed = false;
+		mySpriteRenderer.sprite = left;
 	}
 	
 	// Update is called once per frame
@@ -63,11 +69,13 @@ public class EnemyBehaviour : MonoBehaviour {
 		{
 			isFacingRight = true;
 			isFacingLeft = false;
+			mySpriteRenderer.sprite = right;
 		}
 		else if(dir < 0)
 		{
 			isFacingLeft = true;
 			isFacingRight = false;
+			mySpriteRenderer.sprite = left;
 		}
 
 		if(timeToAttack > 0)
@@ -88,6 +96,7 @@ public class EnemyBehaviour : MonoBehaviour {
 			audioPlayed = false;
 			return;
 		}
+
 	}
 
 
@@ -100,12 +109,12 @@ public class EnemyBehaviour : MonoBehaviour {
 			{
 				Debug.Log ("");
 				Instantiate(laserPrefLeft, new Vector2(this.transform.position.x - 2, this.transform.position.y), Quaternion.identity);
-				timeToAttack = 7f;
+				timeToAttack = 1.5f;
 			}
 			if(isFacingRight == true)
 			{
 				Instantiate(laserPref, new Vector2(this.transform.position.x + 1, this.transform.position.y), Quaternion.identity);
-				timeToAttack = 7f;
+				timeToAttack = 1.5f;
 			}
 		}
 	}
