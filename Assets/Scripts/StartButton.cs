@@ -3,6 +3,8 @@ using System.Collections;
 
 public class StartButton : MonoBehaviour
 {
+	GameObject permaScore;
+
 	void FixedUpdate()
 	{
 		if (gameObject.name == "Start")

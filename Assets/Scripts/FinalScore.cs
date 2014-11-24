@@ -22,6 +22,7 @@ public class FinalScore : MonoBehaviour {
 	void Update () {
 	
 		text.text = "Score: " + endScore;
+		Destroy (objectVars);
 
 	}
 }

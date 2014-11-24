@@ -16,10 +16,9 @@ public class TransferVars : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 	
 		permaScore = nScore.score;
 		DontDestroyOnLoad(this.gameObject);
-
 	}
 }
